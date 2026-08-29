@@ -1,0 +1,19 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "react-native-wheel-picker-android": [
+        "./node_modules/@oh-rn/react-native-wheel-picker-android"
+      ]
+    }
+  },
+  "include": [
+    "App.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "harmony"
+  ]
+}

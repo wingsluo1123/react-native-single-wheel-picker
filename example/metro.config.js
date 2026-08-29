@@ -1,16 +1,26 @@
 /**
- * Metro configuration for React Native
- * https://github.com/facebook/react-native
- *
- * @format
+ * Copyright (c) 2016
+ * This source code is licensed under the MIT license found in the
+ * LICENSE-MIT file in the root directory of this source tree.
  */
-module.exports = {
+
+const {mergeConfig, getDefaultConfig} = require('@react-native/metro-config');
+const {createHarmonyMetroConfig} = require('@react-native-oh/react-native-harmony/metro.config');
+
+/**
+ * @type {import("metro-config").ConfigT}
+ */
+const config = {
   transformer: {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: false,
+        inlineRequires: true,
       },
     }),
   },
 };
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), createHarmonyMetroConfig({
+  reactNativeHarmonyPackageName: '@react-native-oh/react-native-harmony',
+}), config);

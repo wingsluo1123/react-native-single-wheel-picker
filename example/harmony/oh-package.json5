@@ -1,0 +1,58 @@
+{
+  "modelVersion": "6.0.2",
+  "description": "Please describe the basic information.",
+  "dependencies": {
+    "@oh-rn/react-native-wheel-picker-android": "file:../node_modules/@oh-rn/react-native-wheel-picker-android/harmony/wheel_picker_android.har",
+    "@react-native-ohos/picker": "file:../node_modules/@react-native-ohos/picker/harmony/picker.har"
+  },
+  "devDependencies": {
+  },
+  "overrides": {
+    "@rnoh/react-native-openharmony": "file:../node_modules/@react-native-oh/react-native-harmony/react_native_openharmony_release.har"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

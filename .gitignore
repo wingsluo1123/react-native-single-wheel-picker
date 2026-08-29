@@ -1,10 +1,27 @@
-node_modules
-npm-debug.log
+# OSX
+.DS_Store
 
-# Android/IntelliJ
-#
-build/
-.idea
-.gradle
-local.properties
-*.iml
+# node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build output
+/dist
+
+# npm pack output
+*.tgz
+
+# IDE
+.idea/
+.vscode/
+
+# HarmonyOS
+harmony/library/.cxx/
+harmony/library/build/
+harmony/library/.hvigor/
+
+# rn.py build hap fingerprints / local build metadata
+.rn-build/
+
+package-lock.json

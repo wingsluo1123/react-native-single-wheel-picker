@@ -1,29 +1,70 @@
 {
-  "name": "react-native-wheel-picker-android",
+  "name": "react-native-single-wheel-picker",
+  "displayName": "@oh-rn/react-native-single-wheel-picker",
   "version": "3.0.0",
   "description": "Simple Wheel Picker for Android to use with react-native",
-  "main": "index.tsx",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kalontech/ReactNativeWheelPicker.git"
-  },
-  "keywords": [
-    "react-component",
-    "react-native",
-    "android",
-    "picker",
-    "wheel-picker",
-    "date-picker",
-    "date-wheel-picker"
-  ],
-  "author": "Artem Kosiakevych <artem.kosiakevych@gmail.com>",
+  "main": "./dist/commonjs/index.js",
+  "module": "./dist/module/index.js",
+  "react-native": "./dist/module/index.js",
+  "types": "./dist/typescript/index.d.ts",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kalontech/ReactNativeWheelPicker/issues"
+  "private": false,
+  "keywords": [
+    "react-native",
+    "harmony",
+    "harmonyos"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
-  "homepage": "https://github.com/kalontech/ReactNativeWheelPicker",
+  "files": [
+    "dist/",
+    "src/",
+    "harmony/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "prepare": "bob build",
+    "codegen-lib": "react-native codegen-lib-harmony --no-safety-check --npm-package-name wheel_picker_android --cpp-output-path ./harmony/wheel_picker_android/src/main/cpp/generated --ets-output-path ./harmony/wheel_picker_android/src/main/ets/generated --arkts-components-spec-paths ./src/specs/v1/WheelPickerNativeComponent.ts"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.72"
+  },
+  "devDependencies": {
+    "typescript": "5.0.4",
+    "@react-native/typescript-config": "0.79.5",
+    "react": "18.2.0",
+    "@types/react": "18.2.79",
+    "react-native": "0.72.5",
+    "jest": "^29.6.3",
+    "react-native-builder-bob": "^0.18.0",
+    "@react-native-oh/react-native-harmony-cli": "^0.77.50",
+    "metro": "^0.81.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "harmony": {
+    "alias": "react-native-wheel-picker-android",
+    "autolinking": {
+      "cmakeLibraryTargetName": "wheel_picker_android",
+      "ohPackageName": "@oh-rn/react-native-wheel-picker-android",
+      "etsPackageClassName": "GeneratedPackage",
+      "cppPackageClassName": "WheelPickerAndroidPackage"
+    }
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "dist",
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
+  },
   "dependencies": {
-    "@react-native-community/picker": "^1.8.0",
+    "@react-native-ohos/picker": "~2.6.4",
     "moment": "^2.24.0"
   }
 }

@@ -1,0 +1,11 @@
+[
+  {
+    "Name": "@react-native-ohos/picker",
+    "License": "MIT",
+    "License File": "https://gitcode.com/openharmony-sig/rntpc_picker/blob/master/LICENSE",
+    "Version Number": "2.6.4",
+    "Owner": "",
+    "Upstream URL": "https://gitcode.com/openharmony-sig/rntpc_picker",
+    "Description": "Picker component for React Native OpenHarmony"
+  }
+]
