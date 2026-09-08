@@ -3,12 +3,12 @@
  * DO NOT modify it manually, your changes WILL be overwritten.
  */
 import type { RNPackageContext, RNOHPackage } from '@rnoh/react-native-openharmony';
-import GeneratedPackage from '@oh-rn/react-native-wheel-picker-android';
 import PickerPackage from '@react-native-ohos/picker';
+import GeneratedPackage from '@oh-rn/react-native-wheel-picker-android';
 
 export function createRNOHPackages(ctx: RNPackageContext): RNOHPackage[] {
   return [
-    new GeneratedPackage(ctx),
     new PickerPackage(ctx),
+    new GeneratedPackage(ctx),
   ];
 }

@@ -57,6 +57,7 @@ export default class WheelPicker extends React.Component<WheelPickerProps> {
       ...nativeProps
     } = this.props;
     const normalizedData = data.map(item => String(item));
+    const initialPosition = nativeProps.selectedItem ?? nativeProps.initPosition;
 
     return (
       <View
@@ -67,6 +68,7 @@ export default class WheelPicker extends React.Component<WheelPickerProps> {
         <WheelPickerNativeComponent
           {...nativeProps}
           data={normalizedData}
+          initPosition={initialPosition}
           isCyclic={normalizedData.length > 2 ? isCyclic : false}
           onChange={this.onItemSelected}
           style={styles.nativeComponent}
