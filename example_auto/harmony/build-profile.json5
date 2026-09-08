@@ -1,20 +1,6 @@
 {
   "app": {
-    "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "certpath": "C:\\Users\\EDY\\.ohos\\config\\default_harmony_87J1_nisD2juSVcFfWd2uAgHO0XUAsYdPUKb8L1Rxt4=.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001A3434288F43C9439C084594E5474A95F8520BCCC411899900FF761DBC5F542175B324306B9EDB",
-          "profile": "C:\\Users\\EDY\\.ohos\\config\\default_harmony_87J1_nisD2juSVcFfWd2uAgHO0XUAsYdPUKb8L1Rxt4=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\EDY\\.ohos\\config\\default_harmony_87J1_nisD2juSVcFfWd2uAgHO0XUAsYdPUKb8L1Rxt4=.p12",
-          "storePassword": "0000001A22FA59B058619ECFCBC4FF6287A03613352058D748121D551AB7ADC1C429DB7189D9F96C8340"
-        }
-      }
-    ],
+    "signingConfigs": [],
     "products": [
       {
         "name": "default",
