@@ -25,6 +25,7 @@ type Props = WheelPickerStyleProps & {
   dayLabel?: string;
   hourLabel?: string;
   minuteLabel?: string;
+  isCyclic?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -336,6 +337,7 @@ export default class DatePicker extends React.Component<Props, State> {
       minutes: _minutes,
       onDateSelected: _onDateSelected,
       startDate: _startDate,
+      isCyclic = false,
       style,
       ...pickerProps
     } = this.props;
@@ -355,10 +357,9 @@ export default class DatePicker extends React.Component<Props, State> {
           <WheelPicker
             {...pickerProps}
             data={dayOptions.map(option => option.label)}
-            selectedItem={selectedDayIndex}
             initPosition={selectedDayIndex}
             onItemSelected={this.onDaySelected}
-            isCyclic={false}
+            isCyclic={isCyclic}
             style={styles.dateColumn}
           />
         )}
@@ -366,7 +367,6 @@ export default class DatePicker extends React.Component<Props, State> {
           <WheelPicker
             {...pickerProps}
             data={hours.map(hour => `${hour.toString().padStart(2, '0')}${hourLabel ? ` ${hourLabel}` : ''}`)}
-            selectedItem={selectedHourIndex}
             initPosition={selectedHourIndex}
             onItemSelected={this.onHourSelected}
             isCyclic
@@ -377,7 +377,6 @@ export default class DatePicker extends React.Component<Props, State> {
           <WheelPicker
             {...pickerProps}
             data={minutes.map(minute => `${minute.toString().padStart(2, '0')}${minuteLabel ? ` ${minuteLabel}` : ''}`)}
-            selectedItem={selectedMinuteIndex}
             initPosition={selectedMinuteIndex}
             onItemSelected={this.onMinuteSelected}
             isCyclic

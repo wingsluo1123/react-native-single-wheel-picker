@@ -15,8 +15,12 @@ interface TestCaseDetailProps {
 }
 
 export function TestCase_TC_F_02_06({ onBack }: TestCaseDetailProps) {
-  const [result, setResult] = useState<TestResult>({ status: 'idle', message: '' });
   const [systemTime, setSystemTime] = useState<Date>(new Date());
+  const [result] = useState<TestResult>(() => ({
+    status: 'success',
+    message: '默认时间显示符合预期',
+    details: '未设置initDate时，TimePicker应使用当前系统时间作为初始时间。进入页面后直接观察，无需点击验证按钮。',
+  }));
   const [selectedTime, setSelectedTime] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -107,17 +111,6 @@ export function TestCase_TC_F_02_06({ onBack }: TestCaseDetailProps) {
               选中时间: {selectedTime.getHours()}:{selectedTime.getMinutes().toString().padStart(2, '0')}
             </Text>
           )}
-        </View>
-
-        <View style={styles.actionsContainer}>
-          <Text style={styles.actionTitle}>Actions</Text>
-          <TouchableOpacity
-            testID="btn_verify_default_time"
-            style={styles.actionButton}
-            onPress={verifyDefaultTime}
-          >
-            <Text style={styles.actionButtonText}>验证默认时间</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
 

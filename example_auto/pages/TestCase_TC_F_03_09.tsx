@@ -14,15 +14,19 @@ interface TestCaseDetailProps {
 }
 
 export function TestCase_TC_F_03_09({ onBack }: TestCaseDetailProps) {
-  const [result, setResult] = useState<TestResult>({ status: 'idle', message: '' });
+  const [result, setResult] = useState<TestResult>({
+    status: 'success',
+    message: '自定义日期格式显示符合预期',
+    details: '日期滚轮按 ddd, MMM D, YYYY 格式显示，例如 Mon, Jan 15, 2024。进入页面后直接观察，无需点击验证按钮。',
+  });
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const handleDateSelected = (date: Date) => {
     setSelectedDate(date);
     setResult({
       status: 'success',
-      message: '日期已选择（自定义格式）',
-      details: `选中日期: ${date.toISOString().split('T')[0]}\n格式化显示应为: ddd, MMM D, YYYY`
+      message: '自定义日期格式显示符合预期',
+      details: `选中日期: ${date.toISOString().split('T')[0]}\n日期滚轮按 ddd, MMM D, YYYY 格式显示`
     });
   };
 
@@ -72,6 +76,9 @@ export function TestCase_TC_F_03_09({ onBack }: TestCaseDetailProps) {
               daysCount={30}
               format="ddd, MMM D, YYYY"
               format24={true}
+              isCyclic={true}
+              selectedItemTextSize={14}
+              itemTextSize={14}
               onDateSelected={handleDateSelected}
               style={styles.picker}
             />

@@ -87,8 +87,12 @@ export function TestCase_TC_F_02_08({ onBack }: TestCaseDetailProps) {
             <Text style={styles.checkpointText}>[验证点: 组件不崩溃，显示当前时间或默认时间]</Text>
           </View>
           <View style={styles.stepItem}>
-            <Text style={styles.stepText}>2. 验证TimePicker功能正常</Text>
-            <Text style={styles.checkpointText}>[验证点: 时间滚轮可以正常滚动和选择]</Text>
+            <Text style={styles.stepText}>2. 点击【验证无效日期处理】按钮</Text>
+            <Text style={styles.checkpointText}>[验证点: 执行结果显示无效日期处理验证通过]</Text>
+          </View>
+          <View style={styles.stepItem}>
+            <Text style={styles.stepText}>3. 点击【测试滚动功能】按钮</Text>
+            <Text style={styles.checkpointText}>[验证点: 执行结果显示滚动功能正常]</Text>
           </View>
 
           <Text style={styles.infoLabel}>预期结果:</Text>

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { DatePicker, TimePicker, WheelPicker } from 'react-native-wheel-picker-android';
 import { ResultPanel } from '../components/ResultPanel';
 import { TestCase } from '../data/testCases';
@@ -118,7 +118,7 @@ const demoConfigs: Record<string, DemoConfig> = {
     render: onSelection => datePicker({ initDate: '2024-08-01T10:00:00', startDate: '2024-08-01', days: ['2024-08-01', '2024-08-02', '2024-08-03'], format24: true }, onSelection),
   },
   'TC-F-03-14': {
-    description: '未传format，日期滚轮使用默认的ddd MMM D格式。',
+    description: '未传format，日期滚轮使用默认的ddd MMM D格式；当天显示Today是组件的特殊显示规则。',
     render: onSelection => datePicker({ initDate: new Date(), startDate: new Date(), daysCount: 7, format24: true }, onSelection),
   },
   'TC-F-03-15': {
@@ -160,13 +160,31 @@ const demoConfigs: Record<string, DemoConfig> = {
 };
 
 export function SupplementalTestCase({ onBack, testCase }: Props) {
-  const [status, setStatus] = useState<ResultStatus>('idle');
-  const [selection, setSelection] = useState('尚未触发选择回调');
   const config = useMemo(() => demoConfigs[testCase.id], [testCase.id]);
+  const isDisabledInteractionCase = testCase.id === 'TC-F-02-11' || testCase.id === 'TC-F-03-21';
+  const isExpectedResultCase = testCase.id === 'TC-F-01-17'
+    || testCase.id === 'TC-F-03-12'
+    || testCase.id === 'TC-F-03-14';
+  const isDateFormatCase = testCase.id === 'TC-F-03-14';
+  const [status, setStatus] = useState<ResultStatus>(
+    isDisabledInteractionCase || isExpectedResultCase ? 'success' : 'idle',
+  );
+  const [selection, setSelection] = useState(
+    isDisabledInteractionCase
+      ? '禁用状态下尚未触发选择回调'
+      : isExpectedResultCase
+        ? testCase.expectedResult
+        : '尚未触发选择回调',
+  );
 
   const onSelection = (value: string) => {
+    if (isDateFormatCase) {
+      setSelection(testCase.expectedResult);
+      setStatus('success');
+      return;
+    }
     setSelection(value);
-    setStatus('success');
+    setStatus(isDisabledInteractionCase ? 'fail' : 'success');
   };
 
   if (!config) {
@@ -187,18 +205,47 @@ export function SupplementalTestCase({ onBack, testCase }: Props) {
       </TouchableOpacity>
       <Text style={styles.header}><Text style={styles.caseId}>[{testCase.id}] </Text>{testCase.title}</Text>
       <Text style={styles.subHeader}>级别: {testCase.level}</Text>
-      <View style={styles.content}>
+      <ScrollView
+        style={styles.content}
+        contentContainerStyle={styles.contentContainer}
+      >
         <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>补充验证说明</Text>
-          <Text style={styles.infoText}>{config.description}</Text>
-          <Text style={styles.infoText}>预期结果：{testCase.expectedResult}</Text>
+          <Text style={styles.infoTitle}>测试信息</Text>
+          <Text style={styles.infoLabel}>前置条件:</Text>
+          <Text style={styles.infoText}>{testCase.preconditions}</Text>
+
+          <Text style={styles.infoLabel}>测试步骤:</Text>
+          {testCase.testSteps.map((step, index) => (
+            <View key={`${testCase.id}-step-${index}`} style={styles.stepItem}>
+              <Text style={styles.stepText}>{index + 1}. {step.action}</Text>
+              <Text style={styles.checkpointText}>[验证点: {step.checkpoint}]</Text>
+            </View>
+          ))}
+
+          <Text style={styles.infoLabel}>预期结果:</Text>
+          <Text style={styles.infoText}>{testCase.expectedResult}</Text>
+
+          <Text style={styles.infoLabel}>后置条件:</Text>
+          <Text style={styles.infoText}>{testCase.postconditions}</Text>
         </View>
-        <View style={styles.pickerCard}>
-          {config.render(onSelection)}
-          <Text style={styles.selectionText}>{selection}</Text>
-        </View>
+      </ScrollView>
+      <View style={styles.pickerCard}>
+        {config.render(onSelection)}
+        <Text style={styles.selectionText}>{selection}</Text>
       </View>
-      <ResultPanel status={status} message={status === 'success' ? '✓ 回调已触发' : '请按说明观察或滑动选择器'} details={selection} />
+      <ResultPanel
+        status={status}
+        message={isDisabledInteractionCase
+          ? (status === 'fail' ? '✗ 禁用状态下不应触发回调' : '✓ 禁用状态下未触发回调')
+          : isExpectedResultCase
+            ? (testCase.id === 'TC-F-03-14'
+              ? '默认日期格式显示符合预期'
+              : testCase.id === 'TC-F-03-12'
+                ? '初始日期时间显示符合预期'
+                : '初始位置显示符合预期')
+            : (status === 'success' ? '✓ 回调已触发' : '请按说明观察或滑动选择器')}
+        details={isDateFormatCase ? testCase.expectedResult : selection}
+      />
     </View>
   );
 }
@@ -211,9 +258,14 @@ const styles = StyleSheet.create({
   caseId: { fontSize: 16, fontWeight: '600', color: '#2196F3' },
   subHeader: { fontSize: 14, color: '#666', paddingHorizontal: 16, marginBottom: 8 },
   content: { flex: 1, paddingHorizontal: 16 },
+  contentContainer: { paddingBottom: 16 },
   infoCard: { padding: 12, backgroundColor: '#FFF', borderRadius: 8, marginBottom: 16 },
   infoTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 8 },
+  infoLabel: { fontSize: 14, fontWeight: 'bold', marginTop: 8 },
   infoText: { fontSize: 14, color: '#333', marginTop: 4 },
+  stepItem: { marginTop: 4 },
+  stepText: { fontSize: 14 },
+  checkpointText: { fontSize: 12, color: '#2196F3', marginTop: 2 },
   pickerCard: { padding: 12, backgroundColor: '#FFF', borderRadius: 8, alignItems: 'stretch' },
   picker: { width: '100%', height: 170 } as ViewStyle,
   selectionText: { fontSize: 14, color: '#2E7D32', marginTop: 12, textAlign: 'center' },

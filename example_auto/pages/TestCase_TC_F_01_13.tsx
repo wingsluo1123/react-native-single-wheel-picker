@@ -19,7 +19,7 @@ export function TestCase_TC_F_01_13({ onBack }: TestCaseDetailProps) {
     message: '✓ WheelPicker 已显示自定义字体配置',
     details: '选中项使用serif字体，非选中项使用monospace字体'
   });
-  const testData = ['字体测试1', '字体测试2', '字体测试3', '字体测试4', '字体测试5'];
+  const testData = ['ALPHA', 'BRAVO', 'CHARLIE', 'DELTA', 'ECHO'];
 
   return (
     <View style={styles.container}>
@@ -66,7 +66,7 @@ export function TestCase_TC_F_01_13({ onBack }: TestCaseDetailProps) {
               setResult({
                 status: 'success',
                 message: `✓ 字体配置正确应用`,
-                details: `选中索引: ${index}, 选中项serif字体，非选中项monospace字体`
+                details: `选中项: ${testData[index]}，选中项使用serif字体，非选中项使用monospace字体`
               });
             }}
           />

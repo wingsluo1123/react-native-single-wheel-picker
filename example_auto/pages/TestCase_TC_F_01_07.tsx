@@ -51,25 +51,25 @@ export function TestCase_TC_F_01_07({ onBack }: TestCaseDetailProps) {
           <Text style={styles.infoLabel}>后置条件:</Text>
           <Text style={styles.infoValue}>滚轮保持禁用状态</Text>
         </View>
-
-        <View style={styles.pickerContainer}>
-          <Text style={styles.pickerLabel}>WheelPicker 组件（禁用状态 disabled=true）:</Text>
-          <WheelPicker
-            data={testData}
-            style={styles.picker}
-            selectedItem={2}
-            disabled={true}
-            onItemSelected={(index) => {
-              setResult({
-                status: 'fail',
-                message: `✗ 禁用状态下回调不应被触发`,
-                details: `意外触发回调，索引: ${index}`
-              });
-            }}
-          />
-          <Text style={styles.instructionText}>👆 尝试滑动此滚轮，应该无法响应（已禁用）</Text>
-        </View>
       </ScrollView>
+
+      <View style={styles.pickerContainer}>
+        <Text style={styles.pickerLabel}>WheelPicker 组件（禁用状态 disabled=true）:</Text>
+        <WheelPicker
+          data={testData}
+          style={styles.picker}
+          selectedItem={2}
+          disabled={true}
+          onItemSelected={(index) => {
+            setResult({
+              status: 'fail',
+              message: `✗ 禁用状态下回调不应被触发`,
+              details: `意外触发回调，索引: ${index}`
+            });
+          }}
+        />
+        <Text style={styles.instructionText}>👆 尝试滑动此滚轮，应该无法响应（已禁用）</Text>
+      </View>
 
       <ResultPanel status={result.status} message={result.message} details={result.details} />
     </View>

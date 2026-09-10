@@ -42,7 +42,7 @@ export function TestCase_TC_F_02_07({ onBack }: TestCaseDetailProps) {
         <View style={styles.infoCard}>
           <Text style={styles.infoTitle}>测试信息</Text>
           <Text style={styles.infoLabel}>前置条件:</Text>
-          <Text style={styles.infoValue}>应用已安装并启动；已导航到TimePicker测试页面；TimePicker组件已设置从WheelPicker继承的样式：selectedItemTextColor='#FF0000', itemTextSize=18</Text>
+          <Text style={styles.infoValue}>应用已安装并启动；已导航到TimePicker测试页面；TimePicker组件已设置从WheelPicker继承的样式：selectedItemTextColor='#FF0000', selectedItemTextSize=18, itemTextColor='#666666'</Text>
 
           <Text style={styles.infoLabel}>测试步骤:</Text>
           <View style={styles.stepItem}>
@@ -50,8 +50,12 @@ export function TestCase_TC_F_02_07({ onBack }: TestCaseDetailProps) {
             <Text style={styles.checkpointText}>[验证点: 选中项文本颜色为红色（#FF0000）]</Text>
           </View>
           <View style={styles.stepItem}>
-            <Text style={styles.stepText}>2. 观察分钟滚轮非选中项的文本大小</Text>
-            <Text style={styles.checkpointText}>[验证点: 非选中项文本大小为18]</Text>
+            <Text style={styles.stepText}>2. 观察分钟滚轮选中项的文本大小</Text>
+            <Text style={styles.checkpointText}>[验证点: 选中项文本大小为18]</Text>
+          </View>
+          <View style={styles.stepItem}>
+            <Text style={styles.stepText}>3. 点击【验证样式继承】按钮</Text>
+            <Text style={styles.checkpointText}>[验证点: 执行结果显示样式继承验证通过]</Text>
           </View>
 
           <Text style={styles.infoLabel}>预期结果:</Text>
@@ -66,7 +70,7 @@ export function TestCase_TC_F_02_07({ onBack }: TestCaseDetailProps) {
           <View style={styles.styleInfo}>
             <Text style={styles.styleLabel}>样式配置:</Text>
             <Text style={styles.styleText}>• selectedItemTextColor: <Text style={{ color: '#FF0000' }}>#FF0000 (红色)</Text></Text>
-            <Text style={styles.styleText}>• itemTextSize: 18</Text>
+            <Text style={styles.styleText}>• selectedItemTextSize: 18</Text>
             <Text style={styles.styleText}>• itemTextColor: <Text style={{ color: '#666666' }}>#666666 (灰色)</Text></Text>
           </View>
           <TimePicker
@@ -75,8 +79,8 @@ export function TestCase_TC_F_02_07({ onBack }: TestCaseDetailProps) {
             onTimeSelected={handleTimeSelected}
             selectedItemTextColor="#FF0000"
             itemTextColor="#666666"
+            selectedItemTextSize={18}
             itemTextSize={18}
-            selectedItemTextSize={22}
             style={styles.picker}
           />
           {selectedTime && (

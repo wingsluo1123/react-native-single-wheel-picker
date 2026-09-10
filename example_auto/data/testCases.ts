@@ -480,15 +480,19 @@ const baseModules: Module[] = [
         level: 'L1',
         moduleCode: 'F-02',
         moduleName: 'TimePicker 时间选择器',
-        preconditions: `应用已安装并启动；已导航到TimePicker测试页面；TimePicker组件已设置从WheelPicker继承的样式：selectedItemTextColor='#FF0000', itemTextSize=18`,
+        preconditions: `应用已安装并启动；已导航到TimePicker测试页面；TimePicker组件已设置从WheelPicker继承的样式：selectedItemTextColor='#FF0000', selectedItemTextSize=18, itemTextColor='#666666'`,
         testSteps: [
       {
             "action": "观察小时滚轮选中项的文本颜色",
             "checkpoint": "选中项文本颜色为红色（#FF0000）"
       },
       {
-            "action": "观察分钟滚轮非选中项的文本大小",
-            "checkpoint": "非选中项文本大小为18"
+            "action": "观察分钟滚轮选中项的文本大小",
+            "checkpoint": "选中项文本大小为18"
+      },
+      {
+            "action": "点击【验证样式继承】按钮",
+            "checkpoint": "执行结果显示样式继承验证通过"
       }
 ],
         expectedResult: `继承的样式配置正确应用到时间选择器的所有滚轮`,
@@ -507,8 +511,12 @@ const baseModules: Module[] = [
             "checkpoint": "组件不崩溃，显示当前时间或默认时间"
       },
       {
-            "action": "验证TimePicker功能正常",
-            "checkpoint": "时间滚轮可以正常滚动和选择"
+            "action": "点击【验证无效日期处理】按钮",
+            "checkpoint": "执行结果显示无效日期处理验证通过"
+      },
+      {
+            "action": "点击【测试滚动功能】按钮",
+            "checkpoint": "执行结果显示滚动功能正常"
       }
 ],
         expectedResult: `无效日期时使用当前时间或默认值，不崩溃`,
@@ -1118,7 +1126,117 @@ const baseModules: Module[] = [
   },
 ];
 
-const supplementalTestCases: Record<string, TestCase[]> = {
+let supplementalTestCases: Record<string, TestCase[]>;
+
+const supplementalStepDetails: Record<string, { action: string; checkpoint: string; expectedResult: string }> = {
+  'TC-F-01-16': {
+    action: '观察【WheelPicker】中的“一、2、三、4、五”选项并滑动选择“4”',
+    checkpoint: '滚轮完整显示混合数据，选中结果显示索引和“4”',
+    expectedResult: '滚轮可显示字符串和数字混合数据，且可选择任意项。',
+  },
+  'TC-F-01-17': {
+    action: '观察【WheelPicker】初始居中选项',
+    checkpoint: '“选项 D”位于中间选中位置',
+    expectedResult: '滚轮打开时默认选中索引3对应的“选项 D”。',
+  },
+  'TC-F-01-18': {
+    action: '滑动【WheelPicker】选择任意选项并等待停止',
+    checkpoint: '页面显示“onItemSelected(索引)：选项内容”，索引与中间选项一致',
+    expectedResult: '滑动停止后，页面显示的选中索引与滚轮中间项一致。',
+  },
+  'TC-F-01-19': {
+    action: '观察【WheelPicker】的尺寸和背景',
+    checkpoint: '滚轮居中显示为自定义尺寸，浅橙色背景保持稳定',
+    expectedResult: '滚轮以自定义宽度260和高度190显示，背景为浅橙色。',
+  },
+  'TC-F-01-20': {
+    action: '观察【WheelPicker】后滑动选择其他选项',
+    checkpoint: '滚轮正常显示且页面显示新的选中索引和选项内容',
+    expectedResult: 'WheelPicker 正常渲染并可通过滑动更新页面中的选中结果。',
+  },
+  'TC-F-02-09': {
+    action: '观察并滑动【分钟滚轮】',
+    checkpoint: '分钟选项按5分钟间隔显示，可选择00、05至55',
+    expectedResult: '分钟滚轮显示00、05、10至55共12个选项。',
+  },
+  'TC-F-02-10': {
+    action: '观察【小时滚轮】【分钟滚轮】和【AM/PM滚轮】的文本、指示器和背景',
+    checkpoint: '全部滚轮显示红色选中项、蓝色普通项、绿色指示器和浅绿色背景',
+    expectedResult: '时间选择器的全部滚轮使用统一的颜色、字号、指示器和背景样式。',
+  },
+  'TC-F-02-11': {
+    action: '分别滑动【小时滚轮】【分钟滚轮】和【AM/PM滚轮】',
+    checkpoint: '所有滚轮保持原位置，页面不显示新的选中结果',
+    expectedResult: '禁用状态下小时、分钟和AM/PM滚轮均不响应滑动。',
+  },
+  'TC-F-03-11': {
+    action: '观察【日期滚轮】【小时滚轮】和【分钟滚轮】的初始选中项',
+    checkpoint: '初始日期为2024-06-15，时间为14:30',
+    expectedResult: '日期时间选择器初始显示2024-06-15 14:30。',
+  },
+  'TC-F-03-12': {
+    action: '观察【日期滚轮】【小时滚轮】和【分钟滚轮】的初始选中项',
+    checkpoint: '初始日期为2024-07-20，时间为09:45',
+    expectedResult: '日期时间选择器初始显示2024-07-20 09:45。',
+  },
+  'TC-F-03-13': {
+    action: '在【日期滚轮】选择“2024-08-03”',
+    checkpoint: '日期滚轮显示三个可解析日期，页面显示“onDateSelected：2024-08-03 10:00”',
+    expectedResult: '日期滚轮显示2024-08-01、2024-08-02、2024-08-03，选择后显示对应日期时间。',
+  },
+  'TC-F-03-14': {
+    action: '观察日期滚轮中的当天和其他日期文本',
+    checkpoint: '当天显示为Today（特殊显示，不是ddd MMM D），其他日期按ddd MMM D格式显示',
+    expectedResult: '未指定format时，当天显示Today，其他日期按默认ddd MMM D格式显示。',
+  },
+  'TC-F-03-15': {
+    action: '观察并滑动【小时滚轮】',
+    checkpoint: '小时选项覆盖00至23，页面中不显示AM/PM滚轮',
+    expectedResult: '24小时格式下显示00至23小时，且不显示AM/PM滚轮。',
+  },
+  'TC-F-03-16': {
+    action: '观察【小时滚轮】【分钟滚轮】和【AM/PM滚轮】',
+    checkpoint: '小时选项覆盖1至12，AM/PM滚轮可见并可选择',
+    expectedResult: '12小时格式下显示1至12小时、分钟和AM/PM滚轮。',
+  },
+  'TC-F-03-17': {
+    action: '观察并滑动【小时滚轮】',
+    checkpoint: '小时滚轮仅显示09、10、11、12、13、14',
+    expectedResult: '小时滚轮仅显示09、10、11、12、13、14。',
+  },
+  'TC-F-03-18': {
+    action: '观察并滑动【分钟滚轮】',
+    checkpoint: '分钟滚轮仅显示00、15、30、45',
+    expectedResult: '分钟滚轮仅显示00、15、30、45。',
+  },
+  'TC-F-03-19': {
+    action: '观察【DatePicker】中的滚轮组成',
+    checkpoint: '显示日期、小时和分钟滚轮，不显示AM/PM滚轮',
+    expectedResult: '12小时格式下不显示AM/PM滚轮。',
+  },
+  'TC-F-03-20': {
+    action: '观察【日期滚轮】【小时滚轮】【分钟滚轮】和【AM/PM滚轮】的文本、指示器和背景',
+    checkpoint: '全部滚轮显示红色选中项、蓝色普通项、绿色指示器和浅绿色背景',
+    expectedResult: '日期和时间滚轮使用统一的颜色、字号、指示器和背景样式。',
+  },
+  'TC-F-03-21': {
+    action: '分别滑动【日期滚轮】【小时滚轮】【分钟滚轮】和【AM/PM滚轮】',
+    checkpoint: '所有滚轮保持原位置，页面不显示新的选中结果',
+    expectedResult: '禁用状态下日期、小时、分钟和AM/PM滚轮均不响应滑动。',
+  },
+  'TC-F-04-07': {
+    action: '观察【WheelPicker】的中间选中区域',
+    checkpoint: '中间选中区域不显示指示器线条',
+    expectedResult: '滚轮中间区域不显示选中指示器。',
+  },
+  'TC-F-04-08': {
+    action: '观察【WheelPicker】的尺寸、边框和圆角',
+    checkpoint: '滚轮居中显示为自定义尺寸，具有紫色边框和圆角',
+    expectedResult: '滚轮以自定义宽度220、高度180、紫色边框和圆角显示。',
+  },
+};
+
+supplementalTestCases = {
   'F-01': [
     createSupplementalCase('TC-F-01-16', 'WheelPicker混合数据容错', 'L1', '混合字符串和数字数组，确认所有值均可显示与选择。'),
     createSupplementalCase('TC-F-01-17', 'WheelPicker非受控初始位置', 'L1', '使用initPosition设置初始选中项，确认初始位置正确。'),
@@ -1150,19 +1268,25 @@ const supplementalTestCases: Record<string, TestCase[]> = {
   ],
 };
 
-function createSupplementalCase(id: string, title: string, level: string, expectedResult: string): TestCase {
+function createSupplementalCase(id: string, title: string, level: string, fallbackExpectedResult: string): TestCase {
   const moduleCode = id.slice(3, 7);
   const moduleName = baseModules.find(module => module.code === moduleCode)?.name ?? '补充验证';
+  const details = supplementalStepDetails[id];
+  const expectedResult = details?.expectedResult ?? fallbackExpectedResult;
   return {
     id,
     title,
     level,
     moduleCode,
     moduleName,
-    preconditions: '应用已安装并启动；已进入对应补充验证页面。',
-    testSteps: [{ action: '按页面说明观察或滑动选择器', checkpoint: expectedResult }],
+    preconditions: '应用已启动',
+    testSteps: [
+      { action: `点击【${moduleName}】进入模块列表页`, checkpoint: '成功进入模块列表页' },
+      { action: `点击【${title}】进入用例详情页`, checkpoint: '成功进入用例详情页' },
+      { action: details?.action ?? '按页面说明观察或滑动选择器', checkpoint: details?.checkpoint ?? expectedResult },
+    ],
     expectedResult,
-    postconditions: '组件保持稳定，选择结果显示在页面中。',
+    postconditions: '返回模块列表后，应用保持正常运行状态。',
   };
 }
 

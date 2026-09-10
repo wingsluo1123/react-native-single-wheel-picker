@@ -19,27 +19,12 @@ export function TestCase_TC_F_06_06({ onBack }: TestCaseDetailProps) {
 
   const items = Array.from({ length: 15 }, (_, i) => `选项 ${i + 1}`);
 
-  const handleStartTest = () => {
-    setResult({
-      status: 'running',
-      message: '请按照测试步骤手动测试',
-      details: '1. 缓慢向上滑动滚轮，手指不离开屏幕，观察是否精确跟随\n2. 缓慢向下滑动滚轮，观察响应是否准确\n3. 进行极慢速微调滑动，观察是否能响应微小移动'
-    });
-  };
-
-  const handlePass = () => {
+  const handleItemSelected = (index: number) => {
+    setSelectedItem(index);
     setResult({
       status: 'success',
-      message: '测试通过',
-      details: `慢速滑动时滚轮精确跟随手指移动，无延迟或飘移，当前选中: ${items[selectedItem]}`
-    });
-  };
-
-  const handleFail = () => {
-    setResult({
-      status: 'fail',
-      message: '测试失败',
-      details: '慢速滑动时滚轮未能精确跟随或出现延迟、飘移现象'
+      message: '✓ onItemSelected 回调已触发',
+      details: `当前选中索引: ${index}，选中项: ${items[index]}`
     });
   };
 
@@ -83,38 +68,13 @@ export function TestCase_TC_F_06_06({ onBack }: TestCaseDetailProps) {
           <WheelPicker
             selectedItem={selectedItem}
             data={items}
-            onItemSelected={setSelectedItem}
+            onItemSelected={handleItemSelected}
             style={styles.picker}
           />
           <Text style={styles.hint}>缓慢滑动观察精确跟随效果</Text>
         </View>
 
-        <View style={styles.actionsContainer}>
-          <Text style={styles.actionTitle}>测试操作</Text>
-          <TouchableOpacity
-            testID="btn_start_test"
-            style={styles.actionButton}
-            onPress={handleStartTest}
-          >
-            <Text style={styles.actionButtonText}>开始测试</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="btn_pass"
-            style={[styles.actionButton, styles.passButton]}
-            onPress={handlePass}
-          >
-            <Text style={styles.actionButtonText}>通过</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="btn_fail"
-            style={[styles.actionButton, styles.failButton]}
-            onPress={handleFail}
-          >
-            <Text style={styles.actionButtonText}>失败</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
-
       <ResultPanel status={result.status} message={result.message} details={result.details} />
     </View>
   );
@@ -139,10 +99,4 @@ const styles = StyleSheet.create({
   pickerLabel: { fontSize: 16, fontWeight: 'bold', marginBottom: 12 },
   picker: { width: 300, height: 180 },
   hint: { fontSize: 12, color: '#666', marginTop: 8 },
-  actionsContainer: { marginTop: 8 },
-  actionTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 8 },
-  actionButton: { padding: 12, backgroundColor: '#2196F3', borderRadius: 8, alignItems: 'center', marginBottom: 8 },
-  passButton: { backgroundColor: '#4CAF50' },
-  failButton: { backgroundColor: '#F44336' },
-  actionButtonText: { color: '#fff', fontWeight: 'bold' },
 });

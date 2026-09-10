@@ -5,12 +5,12 @@
 // clang-format off
 #pragma once
 #include "RNOH/Package.h"
-#include "WheelPickerAndroidPackage.h"
 #include "PickerPackage.h"
+#include "WheelPickerAndroidPackage.h"
 
 std::vector<rnoh::Package::Shared> createRNOHPackages(const rnoh::Package::Context &ctx) {
   return {
-    std::make_shared<rnoh::WheelPickerAndroidPackage>(ctx),
     std::make_shared<rnoh::PickerPackage>(ctx),
+    std::make_shared<rnoh::WheelPickerAndroidPackage>(ctx),
   };
 }

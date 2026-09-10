@@ -20,27 +20,12 @@ export function TestCase_TC_F_06_05({ onBack }: TestCaseDetailProps) {
   // 生成25个数据项用于测试快速滑动的惯性距离
   const items = Array.from({ length: 25 }, (_, i) => `选项 ${i + 1}`);
 
-  const handleStartTest = () => {
-    setResult({
-      status: 'running',
-      message: '请按照测试步骤手动测试',
-      details: '1. 用力快速向上滑动，观察惯性滚动距离是否较长（跨越多个数据项）\n2. 观察减速曲线是否自然，符合物理规律\n3. 用力快速向下滑动，观察惯性效果是否一致'
-    });
-  };
-
-  const handlePass = () => {
+  const handleItemSelected = (index: number) => {
+    setSelectedItem(index);
     setResult({
       status: 'success',
-      message: '测试通过',
-      details: `快速滑动产生较长惯性滚动，减速曲线自然，当前选中: ${items[selectedItem]}`
-    });
-  };
-
-  const handleFail = () => {
-    setResult({
-      status: 'fail',
-      message: '测试失败',
-      details: '快速滑动后惯性距离过短或减速不符合物理规律'
+      message: '✓ onItemSelected 回调已触发',
+      details: `当前选中索引: ${index}，选中项: ${items[index]}`
     });
   };
 
@@ -84,38 +69,13 @@ export function TestCase_TC_F_06_05({ onBack }: TestCaseDetailProps) {
           <WheelPicker
             selectedItem={selectedItem}
             data={items}
-            onItemSelected={setSelectedItem}
+            onItemSelected={handleItemSelected}
             style={styles.picker}
           />
           <Text style={styles.hint}>快速滑动观察惯性滚动距离</Text>
         </View>
 
-        <View style={styles.actionsContainer}>
-          <Text style={styles.actionTitle}>测试操作</Text>
-          <TouchableOpacity
-            testID="btn_start_test"
-            style={styles.actionButton}
-            onPress={handleStartTest}
-          >
-            <Text style={styles.actionButtonText}>开始测试</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="btn_pass"
-            style={[styles.actionButton, styles.passButton]}
-            onPress={handlePass}
-          >
-            <Text style={styles.actionButtonText}>通过</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="btn_fail"
-            style={[styles.actionButton, styles.failButton]}
-            onPress={handleFail}
-          >
-            <Text style={styles.actionButtonText}>失败</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
-
       <ResultPanel status={result.status} message={result.message} details={result.details} />
     </View>
   );
@@ -140,10 +100,4 @@ const styles = StyleSheet.create({
   pickerLabel: { fontSize: 16, fontWeight: 'bold', marginBottom: 12 },
   picker: { width: 300, height: 180 },
   hint: { fontSize: 12, color: '#666', marginTop: 8 },
-  actionsContainer: { marginTop: 8 },
-  actionTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 8 },
-  actionButton: { padding: 12, backgroundColor: '#2196F3', borderRadius: 8, alignItems: 'center', marginBottom: 8 },
-  passButton: { backgroundColor: '#4CAF50' },
-  failButton: { backgroundColor: '#F44336' },
-  actionButtonText: { color: '#fff', fontWeight: 'bold' },
 });

@@ -239,7 +239,6 @@ export default class TimePicker extends React.Component<Props, State> {
         <WheelPicker
           {...pickerProps}
           data={minutes.map(minute => minute.toString().padStart(2, '0'))}
-          selectedItem={selectedMinuteIndex}
           initPosition={selectedMinuteIndex}
           onItemSelected={this.onMinuteSelected}
           isCyclic
@@ -249,7 +248,6 @@ export default class TimePicker extends React.Component<Props, State> {
           <WheelPicker
             {...pickerProps}
             data={PERIODS}
-            selectedItem={selectedPeriodIndex}
             initPosition={selectedPeriodIndex}
             onItemSelected={this.onPeriodSelected}
             isCyclic={false}

@@ -4,12 +4,12 @@ cmake_minimum_required(VERSION 3.5)
 
 # @actor RNOH_APP
 function(autolink_libraries target)
-    add_subdirectory("${OH_MODULES_DIR}/@oh-rn/react-native-wheel-picker-android/src/main/cpp" ./wheel_picker_android)
     add_subdirectory("${OH_MODULES_DIR}/@react-native-ohos/picker/src/main/cpp" ./rnoh_picker)
+    add_subdirectory("${OH_MODULES_DIR}/@oh-rn/react-native-wheel-picker-android/src/main/cpp" ./wheel_picker_android)
 
     set(AUTOLINKED_LIBRARIES
-        wheel_picker_android
         rnoh_picker
+        wheel_picker_android
     )
 
     foreach(lib ${AUTOLINKED_LIBRARIES})

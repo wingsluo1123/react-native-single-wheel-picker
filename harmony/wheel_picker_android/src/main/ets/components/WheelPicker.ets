@@ -24,12 +24,44 @@ export struct WheelPicker {
   @State private itemTextSize: number = 16;
   @State private itemTextFontFamily: string = '';
   @State private initPosition: number = 0;
-  @State private selectedItem: number = 0;
-  @State private currentSelected: number = 0;
+  @State private controlledPosition: number = 0;
 
   private eventEmitter: Spec.EventEmitter | undefined = undefined;
   private cleanUpCallbacks: (() => void)[] = [];
   private isInitialized: boolean = false;
+  private changing: boolean = false;
+  private selectedPosition: number = 0;
+  private callbackTimer: number = -1;
+  private lastSelectedItemProp: number | undefined = undefined;
+
+  private normalizePosition(position: number, dataLength: number = this.data.length): number {
+    if (dataLength === 0) {
+      return 0;
+    }
+    return Math.max(0, Math.min(position, dataLength - 1));
+  }
+
+  private dataEquals(left: string[], right: string[]): boolean {
+    if (left.length !== right.length) {
+      return false;
+    }
+    return left.every((value, index) => value === right[index]);
+  }
+
+  private scheduleSelectionCallback(): void {
+    if (this.changing) {
+      return;
+    }
+    if (this.callbackTimer >= 0) {
+      clearTimeout(this.callbackTimer);
+    }
+    this.callbackTimer = setTimeout(() => {
+      if (this.eventEmitter) {
+        this.eventEmitter.emit('change', { position: this.selectedPosition });
+      }
+      this.callbackTimer = -1;
+    }, 250);
+  }
 
   aboutToAppear(): void {
     this.eventEmitter = new Spec.EventEmitter(this.ctx.rnInstance, this.tag);
@@ -41,10 +73,11 @@ export struct WheelPicker {
           const rawProps = (descriptor as Spec.Descriptor).rawProps as Spec.DirectRawProps;
           if (rawProps) {
             // 处理 data 数组
-            if (rawProps.data && Array.isArray(rawProps.data)) {
-              this.data = rawProps.data;
-            } else {
-              this.data = [];
+            const nextData = rawProps.data && Array.isArray(rawProps.data)
+              ? rawProps.data
+              : [];
+            if (!this.dataEquals(this.data, nextData)) {
+              this.data = nextData;
             }
 
             this.isCyclic = rawProps.isCyclic ?? false;
@@ -59,11 +92,22 @@ export struct WheelPicker {
             this.itemTextFontFamily = rawProps.itemTextFontFamily ?? '';
 
             // 处理初始位置和选中项
+            const externalSelectedItem = rawProps.selectedItem;
+            const externalPosition = externalSelectedItem ?? rawProps.initPosition;
             if (!this.isInitialized) {
-              this.currentSelected = rawProps.selectedItem ?? rawProps.initPosition ?? 0;
+              this.controlledPosition = this.normalizePosition(externalPosition ?? 0);
+              this.selectedPosition = this.controlledPosition;
+              this.lastSelectedItemProp = externalSelectedItem;
               this.isInitialized = true;
-            } else if (rawProps.selectedItem !== undefined && rawProps.selectedItem !== null) {
-              this.currentSelected = rawProps.selectedItem;
+            } else if (externalSelectedItem !== undefined && externalSelectedItem !== null) {
+              if (externalSelectedItem !== this.lastSelectedItemProp) {
+                const normalizedPosition = this.normalizePosition(externalSelectedItem, nextData.length);
+                if (normalizedPosition !== this.controlledPosition) {
+                  this.controlledPosition = normalizedPosition;
+                }
+                this.selectedPosition = normalizedPosition;
+                this.lastSelectedItemProp = externalSelectedItem;
+              }
             }
           }
         }
@@ -72,6 +116,10 @@ export struct WheelPicker {
   }
 
   aboutToDisappear(): void {
+    if (this.callbackTimer >= 0) {
+      clearTimeout(this.callbackTimer);
+      this.callbackTimer = -1;
+    }
     for (const cb of this.cleanUpCallbacks) {
       cb();
     }
@@ -82,9 +130,9 @@ export struct WheelPicker {
       Column() {
         if (this.data.length > 0) {
           TextPicker({
-            range: this.data,
-            selected: this.currentSelected
+            range: this.data
           })
+            .selectedIndex(this.controlledPosition)
             .canLoop(this.isCyclic)
             .selectedTextStyle({
               color: this.selectedItemTextColor,
@@ -108,13 +156,25 @@ export struct WheelPicker {
             })
             .onChange((value: string | string[], index: number | number[]) => {
               const position = typeof index === 'number' ? index : (Array.isArray(index) ? index[0] : 0);
-              if (position === this.currentSelected) {
+              const normalizedPosition = this.normalizePosition(position);
+              if (normalizedPosition !== this.controlledPosition) {
+                this.controlledPosition = normalizedPosition;
+              }
+              if (normalizedPosition === this.selectedPosition) {
                 return;
               }
-
-              this.currentSelected = position;
-              if (this.eventEmitter) {
-                this.eventEmitter.emit('change', { position: position });
+              this.selectedPosition = normalizedPosition;
+              this.scheduleSelectionCallback();
+            })
+            .onTouch((event: TouchEvent) => {
+              if (event.type === TouchType.Down) {
+                this.changing = true;
+                if (this.callbackTimer >= 0) {
+                  clearTimeout(this.callbackTimer);
+                }
+              } else if (event.type === TouchType.Up) {
+                this.changing = false;
+                this.scheduleSelectionCallback();
               }
             })
             .width('100%')
