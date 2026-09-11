@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-nati
 import { ResultPanel } from '../components/ResultPanel';
 import { DatePicker } from 'react-native-wheel-picker-android';
 import { FULL_MINUTES } from '../data/minutes';
+import { formatDate, formatDateTime } from '../data/dateFormat';
 
 interface TestResult {
   status: 'idle' | 'running' | 'success' | 'fail';
@@ -28,7 +29,7 @@ export function TestCase_TC_F_03_06({ onBack }: TestCaseDetailProps) {
     setResult({
       status: 'success',
       message: `日期时间变化回调已触发（第 ${newCount} 次）`,
-      details: `选中日期时间: ${date.toISOString()}\n日期: ${date.toISOString().split('T')[0]}\n时间: ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`
+      details: `选中日期时间: ${formatDateTime(date)}\n日期: ${formatDate(date)}\n时间: ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`
     });
   };
 
@@ -82,10 +83,10 @@ export function TestCase_TC_F_03_06({ onBack }: TestCaseDetailProps) {
           {selectedDate && (
             <View style={styles.detailsContainer}>
               <Text style={styles.selectedText}>
-                完整日期时间: {selectedDate.toISOString()}
+                完整日期时间: {formatDateTime(selectedDate)}
               </Text>
               <Text style={styles.selectedText}>
-                日期: {selectedDate.toISOString().split('T')[0]}
+                日期: {formatDate(selectedDate)}
               </Text>
               <Text style={styles.selectedText}>
                 时间: {selectedDate.getHours()}:{selectedDate.getMinutes().toString().padStart(2, '0')}

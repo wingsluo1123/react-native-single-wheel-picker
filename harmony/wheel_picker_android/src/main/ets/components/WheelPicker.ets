@@ -29,9 +29,8 @@ export struct WheelPicker {
   private eventEmitter: Spec.EventEmitter | undefined = undefined;
   private cleanUpCallbacks: (() => void)[] = [];
   private isInitialized: boolean = false;
-  private changing: boolean = false;
+  // 已上报给 JS 侧的选中位置，用于去重，避免惯性滚动或跨列滚动时重复/错序回调
   private selectedPosition: number = 0;
-  private callbackTimer: number = -1;
   private lastSelectedItemProp: number | undefined = undefined;
 
   private normalizePosition(position: number, dataLength: number = this.data.length): number {
@@ -48,19 +47,14 @@ export struct WheelPicker {
     return left.every((value, index) => value === right[index]);
   }
 
-  private scheduleSelectionCallback(): void {
-    if (this.changing) {
+  private emitChange(position: number): void {
+    if (position === this.selectedPosition) {
       return;
     }
-    if (this.callbackTimer >= 0) {
-      clearTimeout(this.callbackTimer);
+    this.selectedPosition = position;
+    if (this.eventEmitter) {
+      this.eventEmitter.emit('change', { position });
     }
-    this.callbackTimer = setTimeout(() => {
-      if (this.eventEmitter) {
-        this.eventEmitter.emit('change', { position: this.selectedPosition });
-      }
-      this.callbackTimer = -1;
-    }, 250);
   }
 
   aboutToAppear(): void {
@@ -116,10 +110,6 @@ export struct WheelPicker {
   }
 
   aboutToDisappear(): void {
-    if (this.callbackTimer >= 0) {
-      clearTimeout(this.callbackTimer);
-      this.callbackTimer = -1;
-    }
     for (const cb of this.cleanUpCallbacks) {
       cb();
     }
@@ -160,22 +150,14 @@ export struct WheelPicker {
               if (normalizedPosition !== this.controlledPosition) {
                 this.controlledPosition = normalizedPosition;
               }
-              if (normalizedPosition === this.selectedPosition) {
-                return;
-              }
-              this.selectedPosition = normalizedPosition;
-              this.scheduleSelectionCallback();
             })
-            .onTouch((event: TouchEvent) => {
-              if (event.type === TouchType.Down) {
-                this.changing = true;
-                if (this.callbackTimer >= 0) {
-                  clearTimeout(this.callbackTimer);
-                }
-              } else if (event.type === TouchType.Up) {
-                this.changing = false;
-                this.scheduleSelectionCallback();
+            .onScrollStop((value: string | string[], index: number | number[]) => {
+              const position = typeof index === 'number' ? index : (Array.isArray(index) ? index[0] : 0);
+              const normalizedPosition = this.normalizePosition(position);
+              if (normalizedPosition !== this.controlledPosition) {
+                this.controlledPosition = normalizedPosition;
               }
+              this.emitChange(normalizedPosition);
             })
             .width('100%')
             .height('100%')

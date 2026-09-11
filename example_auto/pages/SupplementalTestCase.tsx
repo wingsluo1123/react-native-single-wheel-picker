@@ -163,6 +163,7 @@ export function SupplementalTestCase({ onBack, testCase }: Props) {
   const config = useMemo(() => demoConfigs[testCase.id], [testCase.id]);
   const isDisabledInteractionCase = testCase.id === 'TC-F-02-11' || testCase.id === 'TC-F-03-21';
   const isExpectedResultCase = testCase.id === 'TC-F-01-17'
+    || testCase.id === 'TC-F-03-11'
     || testCase.id === 'TC-F-03-12'
     || testCase.id === 'TC-F-03-14';
   const isDateFormatCase = testCase.id === 'TC-F-03-14';
@@ -240,7 +241,7 @@ export function SupplementalTestCase({ onBack, testCase }: Props) {
           : isExpectedResultCase
             ? (testCase.id === 'TC-F-03-14'
               ? '默认日期格式显示符合预期'
-              : testCase.id === 'TC-F-03-12'
+              : testCase.id === 'TC-F-03-11' || testCase.id === 'TC-F-03-12'
                 ? '初始日期时间显示符合预期'
                 : '初始位置显示符合预期')
             : (status === 'success' ? '✓ 回调已触发' : '请按说明观察或滑动选择器')}

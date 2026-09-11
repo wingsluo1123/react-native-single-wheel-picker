@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { ResultPanel } from '../components/ResultPanel';
 import { DatePicker } from 'react-native-wheel-picker-android';
+import { formatDate } from '../data/dateFormat';
 
 interface TestResult {
   status: 'idle' | 'running' | 'success' | 'fail';
@@ -23,7 +24,7 @@ export function TestCase_TC_F_03_03({ onBack }: TestCaseDetailProps) {
     setResult({
       status: 'success',
       message: `日期已选择（格式: ${dateFormat}）`,
-      details: `选中日期: ${date.toISOString().split('T')[0]}`
+      details: `选中日期: ${formatDate(date)}`
     });
   };
 
@@ -99,7 +100,7 @@ export function TestCase_TC_F_03_03({ onBack }: TestCaseDetailProps) {
           </View>
           {selectedDate && (
             <Text style={styles.selectedText}>
-              当前选中: {selectedDate.toISOString().split('T')[0]}
+              当前选中: {formatDate(selectedDate)}
             </Text>
           )}
         </View>

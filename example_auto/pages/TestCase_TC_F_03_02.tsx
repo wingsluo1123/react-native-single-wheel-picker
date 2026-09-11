@@ -3,6 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-nati
 import { ResultPanel } from '../components/ResultPanel';
 import { DatePicker } from 'react-native-wheel-picker-android';
 import { FULL_MINUTES } from '../data/minutes';
+import { formatDate } from '../data/dateFormat';
 
 interface TestResult {
   status: 'idle' | 'running' | 'success' | 'fail';
@@ -27,7 +28,7 @@ export function TestCase_TC_F_03_02({ onBack }: TestCaseDetailProps) {
     setResult({
       status: 'success',
       message: isToday ? '选中了今天的日期（应显示为Today）' : '选中了其他日期',
-      details: `选中日期: ${date.toISOString().split('T')[0]}`
+      details: `选中日期: ${formatDate(date)}`
     });
   };
 
@@ -76,7 +77,7 @@ export function TestCase_TC_F_03_02({ onBack }: TestCaseDetailProps) {
           </View>
           {selectedDate && (
             <Text style={styles.selectedText}>
-              当前选中: {selectedDate.toISOString().split('T')[0]}
+              当前选中: {formatDate(selectedDate)}
             </Text>
           )}
           <Text style={styles.hintText}>

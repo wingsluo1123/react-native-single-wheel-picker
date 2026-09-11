@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { ResultPanel } from '../components/ResultPanel';
 import { DatePicker } from 'react-native-wheel-picker-android';
+import { formatDate } from '../data/dateFormat';
 
 interface TestResult {
   status: 'idle' | 'running' | 'success' | 'fail';
@@ -26,7 +27,7 @@ export function TestCase_TC_F_03_09({ onBack }: TestCaseDetailProps) {
     setResult({
       status: 'success',
       message: '自定义日期格式显示符合预期',
-      details: `选中日期: ${date.toISOString().split('T')[0]}\n日期滚轮按 ddd, MMM D, YYYY 格式显示`
+      details: `选中日期: ${formatDate(date)}\n日期滚轮按 ddd, MMM D, YYYY 格式显示`
     });
   };
 
@@ -85,7 +86,7 @@ export function TestCase_TC_F_03_09({ onBack }: TestCaseDetailProps) {
           </View>
           {selectedDate && (
             <Text style={styles.selectedText}>
-              当前选中: {selectedDate.toISOString().split('T')[0]}
+              当前选中: {formatDate(selectedDate)}
             </Text>
           )}
           <Text style={styles.hintText}>
