@@ -1,4 +1,7 @@
-本项目基于 [Cero-Studio/ReactNativeWheelPicker](https://github.com/Cero-Studio/ReactNativeWheelPicker) 开发。如果在使用过程中有任何问题，可以在 GitCode 提交 Issue，会及时跟进。
+# react-native-single-wheel-picker
+
+本项目基于 [Cero-Studio/ReactNativeWheelPicker](https://github.com/Cero-Studio/ReactNativeWheelPicker) 开发，并适配 React Native for OpenHarmony。
+如果在使用过程中有任何问题，可以在 [GitCode](https://gitcode.com/hxa-rn/react-native-single-wheel-picker) 提交 Issue，我们会及时跟进。
 
 ## **项目介绍**
 
@@ -8,21 +11,6 @@
 - `TimePicker`：JS 层组合两个或三个 `WheelPicker`，用于选择时、分与 AM/PM。
 - `DatePicker`：JS 层组合日期、时、分与 AM/PM 滚轮，用于选择日期时间。
 
-### 目录说明
-
-```text
-oh-rn-react-native-single-wheel-picker/
-├── src/
-│   ├── WheelPicker.harmony.tsx      # WheelPicker 的 JS 包装与事件转换
-│   ├── TimePicker.harmony.tsx       # 时间选择器组合实现
-│   ├── DatePicker.harmony.tsx       # 日期时间选择器组合实现
-│   └── specs/v1/                    # Fabric 组件声明
-└── harmony/wheel_picker_android/
-    └── src/main/
-        ├── ets/components/          # ArkTS TextPicker 实现
-        └── cpp/                     # RNOH C++ Package 与 Codegen 产物
-```
-
 ## **集成指南**
 
 ### 安装
@@ -30,20 +18,29 @@ oh-rn-react-native-single-wheel-picker/
 在 React Native 工程根目录执行：
 
 ```bash
-npm install react-native-single-wheel-picker
+npm install @hxa-rn/react-native-single-wheel-picker
 ```
 
-该包已声明鸿蒙 Autolinking 信息。使用支持 Autolinking 的 React Native for OpenHarmony 工程时，无需手动注册 ETS 或 C++ Package；按工程现有流程安装依赖、生成 Bundle 并编译 HAP 即可。
+本库要求宿主工程提供以下 peer dependency：
 
-JS 侧统一从鸿蒙别名导入：
+- `react-native >=0.72`
+- `react >=16.0.0`
+
+### Autolinking
+
+本库支持 RNOH Autolinking。安装依赖后由宿主工程自动接入，无需手动注册 ETS 或 C++ Package；请继续执行宿主工程自身的依赖同步、Bundle 生成和构建流程。
+
+### 导入
 
 ```tsx
 import {
   DatePicker,
   TimePicker,
   WheelPicker,
-} from 'react-native-single-wheel-picker';
+} from '@hxa-rn/react-native-single-wheel-picker';
 ```
+
+入口实际导出 `WheelPicker`、`TimePicker` 和 `DatePicker` 三个组件。
 
 ## **使用说明**
 
@@ -143,7 +140,11 @@ export function DatePickerExample() {
 
 ## **接口文档**
 
+以下 API 依据 `src/index.tsx`、`src/index.d.ts`、`src/WheelPicker.harmony.tsx`、`src/TimePicker.harmony.tsx`、`src/DatePicker.harmony.tsx` 和 `src/specs/v1/WheelPickerNativeComponent.ts` 整理。
+
 ### WheelPicker
+
+鸿蒙原生 Fabric 组件，底层使用 ArkUI `TextPicker` 实现滚轮选择。
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
@@ -201,7 +202,64 @@ export function DatePickerExample() {
 | `dayLabel` | `string` | - | 自动生成日期文本的后缀。 |
 | `hourLabel` | `string` | - | 小时文本的后缀。 |
 | `minuteLabel` | `string` | - | 分钟文本的后缀。 |
+| `isCyclic` | `boolean` | `false` | 是否循环滚动日期列。 |
 | `style` | `StyleProp<ViewStyle>` | `{ height: 150 }` | 选择器整体样式。 |
+
+## 快速验证（运行 Example）
+
+### 前置条件
+
+| 依赖 | 版本要求 |
+| :-- | --- |
+| Node.js | `>=20` |
+| React Native for OpenHarmony | `0.72.139` |
+| HarmonyOS SDK | API 21+ |
+
+### 运行步骤
+
+1. 获取开发分支源码：
+
+   ```bash
+   git clone -b react-native-single-wheel-picker_dev https://gitcode.com/hxa-rn/react-native-single-wheel-picker.git
+   ```
+
+2. 进入仓库根目录：
+
+   ```bash
+   cd react-native-single-wheel-picker
+   ```
+
+3. 安装根目录依赖：
+
+   ```bash
+   npm i
+   ```
+
+4. 生成供示例工程安装的本地安装包：
+
+   ```bash
+   npm pack
+   ```
+
+5. 进入 `example` 目录：
+
+   ```bash
+   cd example
+   ```
+
+6. 安装示例工程依赖：
+
+   ```bash
+   npm i
+   ```
+
+7. 生成 React Native JavaScript Bundle：
+
+   ```bash
+   npm run dev
+   ```
+
+8. 使用 DevEco Studio 打开 `example/harmony`，同步依赖，完成签名配置后构建并运行应用。
 
 ## **约束与限制**
 
@@ -230,10 +288,13 @@ export function DatePickerExample() {
 
 本库不依赖额外的 HarmonyOS 系统权限。
 
-## **开源license**
+## **开源 License**
 
 本项目采用 [MIT License](./LICENSE)，与上游项目保持一致。
 
 ## **问题反馈渠道**
 
-如在使用过程中遇到问题，请在 [GitCode](https://gitcode.com/) 提交 [Issue](https://gitcode.com/hxa-rn/react-native-multi-wheel-picker/issues)，我们会及时跟进。欢迎参与社区交流或提交 Pull Request；提交前请确保改动与 React Native for OpenHarmony 的 Fabric 组件、ArkTS 和 Codegen 约定保持一致。
+如在使用过程中遇到问题，请在 [GitCode](https://gitcode.com/hxa-rn/react-native-single-wheel-picker) 提交[Issue](https://gitcode.com/hxa-rn/react-native-single-wheel-picker/issues)，我们会及时跟进。
+
+- 提交问题时建议附上项目版本、RN 版本、OpenHarmony SDK/API 版本、DevEco Studio 版本、设备信息、复现步骤及相关日志。
+- 涉及签名、账号、密钥或用户数据时，请勿在 Issue 中上传敏感信息；可按组织安全流程提交脱敏日志。
