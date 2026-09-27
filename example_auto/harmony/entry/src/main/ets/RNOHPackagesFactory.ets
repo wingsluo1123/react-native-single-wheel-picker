@@ -4,7 +4,7 @@
  */
 import type { RNPackageContext, RNOHPackage } from '@rnoh/react-native-openharmony';
 import PickerPackage from '@react-native-ohos/picker';
-import GeneratedPackage from '@oh-rn/react-native-wheel-picker-android';
+import GeneratedPackage from '@hxa-rn/react-native-wheel-picker-android';
 
 export function createRNOHPackages(ctx: RNPackageContext): RNOHPackage[] {
   return [

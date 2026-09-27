@@ -17,7 +17,7 @@ import {
 } from '@rnoh/react-native-openharmony';
 import { createRNPackages } from '../RNPackagesFactory';
 // GEN:FABRIC_IMPORTS_BEGIN
-import { WheelPicker } from '@oh-rn/react-native-wheel-picker-android/src/main/ets/components/WheelPicker';
+import { WheelPicker } from '@hxa-rn/react-native-wheel-picker-android/src/main/ets/components/WheelPicker';
 
 // GEN:FABRIC_IMPORTS_END
 

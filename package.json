@@ -1,6 +1,6 @@
 {
-  "name": "react-native-single-wheel-picker",
-  "displayName": "@oh-rn/react-native-single-wheel-picker",
+  "name": "@hxa-rn/react-native-single-wheel-picker",
+  "displayName": "@hxa-rn/react-native-single-wheel-picker",
   "version": "3.0.0",
   "description": "Simple Wheel Picker for Android to use with react-native",
   "main": "./dist/commonjs/index.js",
@@ -49,7 +49,7 @@
     "alias": "react-native-wheel-picker-android",
     "autolinking": {
       "cmakeLibraryTargetName": "wheel_picker_android",
-      "ohPackageName": "@oh-rn/react-native-wheel-picker-android",
+      "ohPackageName": "@hxa-rn/react-native-wheel-picker-android",
       "etsPackageClassName": "GeneratedPackage",
       "cppPackageClassName": "WheelPickerAndroidPackage"
     }

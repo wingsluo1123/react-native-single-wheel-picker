@@ -24,7 +24,6 @@ npm install @hxa-rn/react-native-single-wheel-picker
 本库要求宿主工程提供以下 peer dependency：
 
 - `react-native >=0.72`
-- `react >=16.0.0`
 
 ### Autolinking
 
@@ -40,16 +39,16 @@ import {
 } from '@hxa-rn/react-native-single-wheel-picker';
 ```
 
-入口实际导出 `WheelPicker`、`TimePicker` 和 `DatePicker` 三个组件。
-
 ## **使用说明**
 
-### WheelPicker：基础滚轮
+### 基础用法
+
+`WheelPicker` 为单列滚轮选择器，`data` 为必填项。
 
 ```tsx
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
-import { WheelPicker } from 'react-native-single-wheel-picker';
+import { WheelPicker } from '@hxa-rn/react-native-single-wheel-picker';
 
 export function WheelPickerExample() {
   const options = ['星期一', '星期二', '星期三', '星期四', '星期五'];
@@ -76,12 +75,14 @@ export function WheelPickerExample() {
 }
 ```
 
-### TimePicker：时间选择
+`selectedItemTextColor`、`selectedItemTextSize` 等样式属性可直接写在 `WheelPicker` 上，也可通过 `TimePicker`、`DatePicker` 透传给内部的每一列滚轮。
+
+### 时间选择（TimePicker）
 
 ```tsx
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
-import { TimePicker } from 'react-native-single-wheel-picker';
+import { TimePicker } from '@hxa-rn/react-native-single-wheel-picker';
 
 export function TimePickerExample() {
   const [selectedTime, setSelectedTime] = useState(new Date(2026, 0, 1, 9, 30));
@@ -105,12 +106,12 @@ export function TimePickerExample() {
 
 `format24={false}`（默认值）时，组件额外显示 `AM` / `PM` 列；`format24={true}` 时只显示时、分两列。
 
-### DatePicker：日期时间选择
+### 日期时间选择（DatePicker）
 
 ```tsx
 import React, { useState } from 'react';
 import { Text, View } from 'react-native';
-import { DatePicker } from 'react-native-single-wheel-picker';
+import { DatePicker } from '@hxa-rn/react-native-single-wheel-picker';
 
 export function DatePickerExample() {
   const [selectedDate, setSelectedDate] = useState(new Date(2026, 0, 1, 9, 30));
@@ -140,7 +141,7 @@ export function DatePickerExample() {
 
 ## **接口文档**
 
-以下 API 依据 `src/index.tsx`、`src/index.d.ts`、`src/WheelPicker.harmony.tsx`、`src/TimePicker.harmony.tsx`、`src/DatePicker.harmony.tsx` 和 `src/specs/v1/WheelPickerNativeComponent.ts` 整理。
+以下 API 依据 `src/index.tsx`、`src/index.d.ts`、`src/WheelPicker.harmony.tsx`、`src/TimePicker.harmony.tsx`、`src/DatePicker.harmony.tsx`、`src/specs/v1/WheelPickerNativeComponent.ts` 和 `harmony/wheel_picker_android/src/main/ets/components/WheelPicker.ets` 整理。
 
 ### WheelPicker
 
@@ -213,53 +214,38 @@ export function DatePickerExample() {
 | :-- | --- |
 | Node.js | `>=20` |
 | React Native for OpenHarmony | `0.72.139` |
-| HarmonyOS SDK | API 21+ |
+| HarmonyOS SDK | API 21 或更高版本 |
 
 ### 运行步骤
 
-1. 获取开发分支源码：
-
-   ```bash
-   git clone -b react-native-single-wheel-picker_dev https://gitcode.com/hxa-rn/react-native-single-wheel-picker.git
-   ```
-
-2. 进入仓库根目录：
-
-   ```bash
-   cd react-native-single-wheel-picker
-   ```
-
-3. 安装根目录依赖：
+1. 在仓库根目录安装依赖（`prepare` 钩子会执行 `bob build` 生成 `dist/`）：
 
    ```bash
    npm i
    ```
 
-4. 生成供示例工程安装的本地安装包：
+2. 生成供示例工程安装的本地安装包：
 
    ```bash
    npm pack
    ```
 
-5. 进入 `example` 目录：
+   该命令会生成 `hxa-rn-react-native-single-wheel-picker-3.0.0.tgz`，`example/package.json` 已通过 `file:` 引用该文件。
+
+3. 进入 `example` 目录并安装示例工程依赖：
 
    ```bash
    cd example
-   ```
-
-6. 安装示例工程依赖：
-
-   ```bash
    npm i
    ```
 
-7. 生成 React Native JavaScript Bundle：
+4. 生成 React Native JavaScript Bundle：
 
    ```bash
    npm run dev
    ```
 
-8. 使用 DevEco Studio 打开 `example/harmony`，同步依赖，完成签名配置后构建并运行应用。
+5. 使用 DevEco Studio 打开 `example/harmony`，同步依赖，完成签名配置后构建并运行应用。
 
 ## **约束与限制**
 
@@ -267,11 +253,11 @@ export function DatePickerExample() {
 
 | 依赖 | 要求 |
 | --- | --- |
-| React Native for OpenHarmony | `0.72` 或更高版本 |
+| React Native for OpenHarmony | `0.72.139` |
 | HarmonyOS SDK | API `21` 或更高版本 |
 | Example 工程 `compatibleSdkVersion` | `6.0.1(21)` |
 | Example 工程 `targetSdkVersion` | `6.1.1(24)` |
-| Node.js | `18` 或更高版本 |
+| Node.js | `>=20` |
 
 ### 使用限制
 
@@ -280,6 +266,7 @@ export function DatePickerExample() {
 - 仅当 `data` 项数大于 `2` 时，`isCyclic` 才会生效；项数为 `2` 或更少时会自动关闭循环。
 - `WheelPicker` 默认高度为 `150`。传入 `style` 时应提供可见高度。
 - `selectedItem` 是受控索引；未提供时，首次渲染使用 `initPosition`，两者缺省时默认选中第 `0` 项。
+- `DatePicker` 自动生成的日期列表中，与当天日期相同的项会显示为 `Today`；传入 `dayLabel` 时显示为 `Today <dayLabel>`。
 - `DatePicker.days` 建议传入可由 JavaScript `Date` 解析的日期字符串；其显示文本保留原值，但内部仍需将其转换为日期以构造回调结果。
 - `TimePicker` 和 `DatePicker` 的 `minutes` 会转换为数字并过滤无效值；请传入可转换为有效数字的分钟值。
 - `TimePicker`、`DatePicker` 不支持通过 `startTime`、`endTime` 限制可选时段；这两个属性不会参与当前鸿蒙实现。
@@ -294,7 +281,7 @@ export function DatePickerExample() {
 
 ## **问题反馈渠道**
 
-如在使用过程中遇到问题，请在 [GitCode](https://gitcode.com/hxa-rn/react-native-single-wheel-picker) 提交[Issue](https://gitcode.com/hxa-rn/react-native-single-wheel-picker/issues)，我们会及时跟进。
+如在使用过程中遇到问题，请在 [GitCode](https://gitcode.com/hxa-rn/react-native-single-wheel-picker) 提交 [Issue](https://gitcode.com/hxa-rn/react-native-single-wheel-picker/issues)，我们会及时跟进。
 
 - 提交问题时建议附上项目版本、RN 版本、OpenHarmony SDK/API 版本、DevEco Studio 版本、设备信息、复现步骤及相关日志。
 - 涉及签名、账号、密钥或用户数据时，请勿在 Issue 中上传敏感信息；可按组织安全流程提交脱敏日志。

@@ -5,7 +5,7 @@
     "baseUrl": ".",
     "paths": {
       "react-native-wheel-picker-android": [
-        "./node_modules/@oh-rn/react-native-wheel-picker-android"
+        "./node_modules/@hxa-rn/react-native-wheel-picker-android"
       ]
     }
   },
