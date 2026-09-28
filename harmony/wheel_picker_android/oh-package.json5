@@ -1,8 +1,6 @@
 {
-  "license": "Apache-2.0",
-  "devDependencies": {
-
-  },
+  "license": "MIT",
+  "devDependencies": {},
   "author": "",
   "name": "@hxa-rn/react-native-wheel-picker-android",
   "description": "Please describe the basic information.",
