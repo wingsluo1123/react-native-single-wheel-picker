@@ -2,4 +2,4 @@
 
 ### 以下是此项目的committer人员
 
-- [zhufan](https://gitcode.com/ryanzhu0)
+- [ryanzhu0](https://gitcode.com/ryanzhu0)
