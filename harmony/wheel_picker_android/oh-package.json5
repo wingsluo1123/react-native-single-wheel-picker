@@ -2,7 +2,7 @@
   "license": "MIT",
   "devDependencies": {},
   "author": "",
-  "name": "@hxa-rn/react-native-wheel-picker-android",
+  "name": "@hxa-rn/react-native-single-wheel-picker",
   "description": "Please describe the basic information.",
   "main": "index.ets",
   "version": "1.0.0",

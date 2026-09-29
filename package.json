@@ -49,7 +49,7 @@
     "alias": "react-native-wheel-picker-android",
     "autolinking": {
       "cmakeLibraryTargetName": "wheel_picker_android",
-      "ohPackageName": "@hxa-rn/react-native-wheel-picker-android",
+      "ohPackageName": "@hxa-rn/react-native-single-wheel-picker",
       "etsPackageClassName": "GeneratedPackage",
       "cppPackageClassName": "WheelPickerAndroidPackage"
     }

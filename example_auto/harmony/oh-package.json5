@@ -3,7 +3,7 @@
   "description": "Please describe the basic information.",
   "dependencies": {
     "@react-native-ohos/picker": "file:../node_modules/@react-native-ohos/picker/harmony/picker.har",
-    "@hxa-rn/react-native-wheel-picker-android": "file:../node_modules/@hxa-rn/react-native-wheel-picker-android/harmony/wheel_picker_android.har"
+    "@hxa-rn/react-native-single-wheel-picker": "file:../node_modules/@hxa-rn/react-native-single-wheel-picker/harmony/wheel_picker_android.har"
   },
   "devDependencies": {
   },

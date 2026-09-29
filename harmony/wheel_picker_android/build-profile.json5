@@ -1,12 +1,19 @@
 {
   "apiType": "stageMode",
-//  "buildOption": {
-//    "externalNativeOptions": {
-//      "path": "./src/main/cpp/CMakeLists.txt",
-//      "arguments": "",
-//      "cppFlags": ""
-//    },
-//  },
+  "buildOption": {
+    // 产出源码 HAR（含 src/main/ets、src/main/cpp 源码）而非字节码 HAR。
+    // DevEco Studio 5.0.3.800 起 byteCodeHar 默认为 true，会导致 har 内只有
+    // modules.abc 和 .d.ets，消费方（autolinking.cmake / Index.ets 源码路径导入）
+    // 必须依赖源码 HAR，因此这里显式关闭。
+    "arkOptions": {
+      "byteCodeHar": false
+    }
+    //  "externalNativeOptions": {
+    //    "path": "./src/main/cpp/CMakeLists.txt",
+    //    "arguments": "",
+    //    "cppFlags": ""
+    //  },
+  },
   "targets": [
     {
       "name": "default",
