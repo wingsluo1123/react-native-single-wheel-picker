@@ -1,7 +1,7 @@
 {
   "name": "@hxa-rn/react-native-single-wheel-picker",
   "displayName": "@hxa-rn/react-native-single-wheel-picker",
-  "version": "3.0.0",
+  "version": "1.0.0",
   "description": "react-native-single-wheel-picker for HarmonyOS",
   "main": "./dist/commonjs/index.js",
   "module": "./dist/module/index.js",
