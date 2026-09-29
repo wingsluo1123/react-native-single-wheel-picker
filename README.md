@@ -230,7 +230,7 @@ export function DatePickerExample() {
    npm pack
    ```
 
-   该命令会生成 `hxa-rn-react-native-single-wheel-picker-3.0.0.tgz`，`example/package.json` 已通过 `file:` 引用该文件。
+   该命令会生成 `hxa-rn-react-native-single-wheel-picker-1.0.0.tgz`，`example/package.json` 已通过 `file:` 引用该文件。
 
 3. 进入 `example` 目录并安装示例工程依赖：
 
