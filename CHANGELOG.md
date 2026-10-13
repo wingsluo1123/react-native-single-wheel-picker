@@ -2,7 +2,7 @@
 
 ## 鸿蒙化Log
 
-## 1.0.0 - 2026-09-27
+## 3.0.0 - 2026-09-27
 
 发布 `@hxa-rn/react-native-single-wheel-picker@3.0.0`。
 
