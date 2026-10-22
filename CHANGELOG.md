@@ -2,9 +2,17 @@
 
 ## 鸿蒙化Log
 
+## 3.0.1 - 2026-10-21
+
+release @hxa-rn/react-native-single-wheel-picker@3.0.1
+
+### Changed
+- 补全 package.json 的 homepage、repository 元数据。
+- LICENSE 增加 Modifications Copyright 声明。
+
 ## 3.0.0 - 2026-09-27
 
-发布 `@hxa-rn/react-native-single-wheel-picker@3.0.0`。
+release @hxa-rn/react-native-single-wheel-picker@3.0.0
 
 ### Added
 - 首个鸿蒙适配版本，基于上游 `ReactNativeWheelPicker` 3.0.0；能力对齐上游：`WheelPicker`、`TimePicker`、`DatePicker`、`data`、`selectedItem`、`initPosition`、`onItemSelected`、`isCyclic`、`format24`、`hours`、`minutes`、`onTimeSelected`、`startDate`、`daysCount`、`days`、`hideDate`、`hideHours`、`hideMinutes`、`hideAM`、`onDateSelected`。
