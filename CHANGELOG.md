@@ -2,6 +2,13 @@
 
 ## 鸿蒙化Log
 
+## 3.0.2 - 2026-10-24
+
+release @hxa-rn/react-native-single-wheel-picker@3.0.2
+
+### Changed
+- 修改 LICENSE 的 Copyright 声明。
+
 ## 3.0.1 - 2026-10-21
 
 release @hxa-rn/react-native-single-wheel-picker@3.0.1
