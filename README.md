@@ -27,7 +27,43 @@ npm install @hxa-rn/react-native-single-wheel-picker
 
 ### Autolinking
 
-本库支持 RNOH Autolinking。安装依赖后由宿主工程自动接入，无需手动注册 ETS 或 C++ Package；请继续执行宿主工程自身的依赖同步、Bundle 生成和构建流程。
+本库支持 RNOH Autolinking。安装依赖后，ETS Package、C++ Package、CMake 构建目标与 `oh-package.json5` 依赖项均由宿主工程自动接入，请继续执行宿主工程自身的依赖同步、Bundle 生成和构建流程。
+
+`WheelPicker` 是基于 ArkUI `TextPicker` 的 ArkTS 自定义组件。自 `3.0.3` 起，本库的 `GeneratedPackage` 通过 `RNOHPackage.createWrappedCustomRNComponentBuilderByComponentNameMap()` 自行注册该组件的 Builder，**宿主工程不需要在 `Index.ets` 中手写 `arkTsComponentNames` 或 `buildCustomRNComponent`**，装上即用。
+
+> `3.0.2` 及更早版本没有这个注册，只做 autolinking 时 `WheelPicker` 不会被挂载，页面上看不到滚轮（既不报错也不崩溃）。遇到这种情况请先升级到 `3.0.3` 及以上。
+
+<details>
+<summary>手动注册写法（仅在宿主工程覆盖了 RNOH 默认 Builder 时需要）</summary>
+
+RNOH 内置的 `buildCustomRNComponent` 会优先查询各 `RNOHPackage` 提供的 Builder 映射，再回落到宿主工程自定义的 Builder。因此只有当宿主工程出于其它原因必须完全接管组件构建时，才需要在 `entry/src/main/ets/pages/Index.ets` 中自行注册：
+
+```ts
+import { WheelPicker } from '@hxa-rn/react-native-single-wheel-picker/src/main/ets/components/WheelPicker';
+
+const arkTsComponentNames: string[] = [WheelPicker.NAME]
+
+@Builder
+export function buildCustomRNComponent(ctx: ComponentBuilderContext) {
+  Stack() {
+    if (ctx.componentName === WheelPicker.NAME) {
+      WheelPicker({
+        ctx: ctx.rnComponentContext,
+        tag: ctx.tag
+      })
+    }
+  }
+  .position({ x: 0, y: 0 })
+}
+
+const wrappedCustomRNComponentBuilder = wrapBuilder(buildCustomRNComponent)
+```
+
+并把 `arkTsComponentNames` 放进 `RNApp` 的 `rnInstanceConfig`、`wrappedCustomRNComponentBuilder` 传给 `RNApp`。可对照本仓库 `example/harmony/entry/src/main/ets/pages/Index.ets`（`example_auto` 则演示不做任何手动接线的「装上即用」写法）。
+
+</details>
+
+无论哪种方式，都请确认 `rnInstanceConfig.enableCAPIArchitecture` 为 `true`。
 
 ### 导入
 
@@ -261,6 +297,7 @@ export function DatePickerExample() {
 ### 使用限制
 
 - 原生滚轮只在鸿蒙平台实现；底层为 ArkUI `TextPicker`。
+- `WheelPicker` 是 ArkTS 自定义组件，由本库的 `GeneratedPackage` 自行注册 Builder（`3.0.3` 起）。使用时请确认 `rnInstanceConfig.enableCAPIArchitecture` 为 `true`。
 - `WheelPicker.data` 为必填项。传入的数值会在 JS 层转换为字符串后显示。
 - 仅当 `data` 项数大于 `2` 时，`isCyclic` 才会生效；项数为 `2` 或更少时会自动关闭循环。
 - `WheelPicker` 默认高度为 `150`。传入 `style` 时应提供可见高度。
@@ -273,6 +310,23 @@ export function DatePickerExample() {
 ### 系统权限
 
 本库不依赖额外的 HarmonyOS 系统权限。
+
+## **常见问题**
+
+### 页面上看不到滚轮（组件不显示、无报错）
+
+按顺序排查：
+
+1. **版本是否为 `3.0.3` 及以上**（最常见原因）。`3.0.2` 及更早版本的 `GeneratedPackage` 没有注册 ArkTS 组件 Builder，只做 autolinking 时 `WheelPicker` 不会被挂载。升级后重新 `ohpm install` 并清理重建 HAP。
+2. **是否开启 C-API 架构**。`rnInstanceConfig.enableCAPIArchitecture` 必须为 `true`。
+3. **宿主工程是否覆盖了组件构建逻辑**。如果宿主工程自行接管了 `buildCustomRNComponent` 且没有回落到 RNOH 默认实现，请按「Autolinking」小节里的「手动注册写法」补上 `WheelPicker` 分支。
+4. **容器是否有可见高度**。`WheelPicker` 默认高度为 `150`；若自行传入 `style`，请确保其高度不为 `0`，且父容器没有把它压缩掉。
+5. **`data` 是否为空**。`data` 为空数组时，鸿蒙侧会显示占位文案 `No data` 而不是滚轮。
+6. **Bundle 与依赖是否已更新**。重新执行 Bundle 生成、`ohpm install` 同步依赖，并清理后重新构建 HAP。
+
+### 日志里出现 `Couldn't create CppComponentInstance for: WheelPicker`
+
+说明鸿蒙侧 C-API 和 ArkTS 两条构建路径都没能创建出组件，通常就是上面第 1 或第 3 步未满足。
 
 ## **开源 License**
 

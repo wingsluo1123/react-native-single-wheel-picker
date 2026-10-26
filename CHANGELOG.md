@@ -2,6 +2,19 @@
 
 ## 鸿蒙化Log
 
+## 3.0.3 - 2026-10-26
+
+release @hxa-rn/react-native-single-wheel-picker@3.0.3
+
+### Fixed
+- 修复宿主工程仅做 autolinking 时 `WheelPicker` 不显示的问题（[issue #1](https://atomgit.com/hxa-rn/react-native-single-wheel-picker/issues/1)）。`GeneratedPackage` 现在重写 `RNOHPackage.createWrappedCustomRNComponentBuilderByComponentNameMap()`，自行注册 `WheelPicker` 的 ArkTS Builder；宿主工程不再需要在 `Index.ets` 中手写 `arkTsComponentNames` 与 `buildCustomRNComponent`。
+
+### Changed
+- README 重写「Autolinking」小节：说明装上即用，手动注册写法改为仅在宿主工程覆盖 RNOH 默认 Builder 时使用。
+
+### Added
+- README 新增「常见问题」小节，补充「页面上看不到滚轮」的排查清单。
+
 ## 3.0.2 - 2026-10-24
 
 release @hxa-rn/react-native-single-wheel-picker@3.0.2

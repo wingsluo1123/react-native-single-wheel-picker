@@ -16,30 +16,12 @@ import {
   RNOHCoreContext
 } from '@rnoh/react-native-openharmony';
 import { createRNPackages } from '../RNPackagesFactory';
-// GEN:FABRIC_IMPORTS_BEGIN
-import { WheelPicker } from '@hxa-rn/react-native-single-wheel-picker/src/main/ets/components/WheelPicker';
 
-// GEN:FABRIC_IMPORTS_END
-
-// GEN:FABRIC_ARK_CONST_BEGIN
-const arkTsComponentNames: string[] = [WheelPicker.NAME]
-
-// GEN:FABRIC_ARK_CONST_END
-
+// WheelPicker 的 ArkTS Builder 由本库的 GeneratedPackage 自行注册
+// (createWrappedCustomRNComponentBuilderByComponentNameMap)，此处无需手写
+// arkTsComponentNames 与组件构建分支 —— 这正是本示例要验证的「装上即用」。
 @Builder
 export function buildCustomRNComponent(ctx: ComponentBuilderContext) {
-// GEN:FABRIC_BUILDER_BODY_BEGIN
-  Stack() {
-    if (ctx.componentName === WheelPicker.NAME) {
-      WheelPicker({
-        ctx: ctx.rnComponentContext,
-        tag: ctx.tag
-      })
-    }
-  }
-  .position({ x: 0, y: 0 })
-
-// GEN:FABRIC_BUILDER_BODY_END
 }
 
 const wrappedCustomRNComponentBuilder = wrapBuilder(buildCustomRNComponent)
@@ -79,7 +61,7 @@ struct Index {
             enableNDKTextMeasuring: true,
             enableBackgroundExecutor: false,
             enableCAPIArchitecture: true,
-            arkTsComponentNames: arkTsComponentNames
+            arkTsComponentNames: []
           },
           initialProps: { 'foo': 'bar' } as Record<string, string>,
           appKey: 'AwesomeProject',
